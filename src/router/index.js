@@ -7,6 +7,7 @@ import Full from '@/containers/Full'
 
 // Views
 import Dashboard from '@/views/Dashboard'
+import Client from '@/models/Client'
 
 // Pages
 import Page404 from '@/views/pages/Page404'
@@ -33,8 +34,15 @@ const router = new Router({
           meta: {
             requiresAuthentication: true
           }
+        },
+        {
+          path: 'client',
+          name: 'Client',
+          component: Client,
+          meta: {
+            requiresAuthentication: true
+          }
         }
-
       ]
     },
     {
