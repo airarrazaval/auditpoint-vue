@@ -22,9 +22,9 @@ export default {
         router.push(atob(redirect))
       }
     }).catch((err) => {
-      console.log('error', err)
+      console.log('login-error', err)
       context.error.show = true
-      context.error.message = err.message || err
+      context.error.messages = err.details ? err.details.map(x => x.message) : [ err.message || err ]
     })
   },
   // To log out, we just need to remove the token
