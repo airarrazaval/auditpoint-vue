@@ -8,21 +8,21 @@
               <b-card-body>
                 <h1>Login</h1>
                 <p class="text-muted">Sign In to your account</p>
-                <b-input-group class="mb-3" v-bind:class="{'error': !validation.email.valid}">
+                <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
                       <i class="icon-envelope"></i>
                     </b-input-group-text>
                   </b-input-group-prepend>
-                  <input type="email" class="form-control" placeholder="Email" v-model="credentials.email" required>
+                  <input type="email" class="form-control" placeholder="Email" v-model="credentials.email">
                 </b-input-group>
-                <b-input-group class="mb-4" v-bind:class="{'error': !validation.password.valid}">
+                <b-input-group class="mb-4">
                   <b-input-group-prepend>
                     <b-input-group-text>
                       <i class="icon-lock"></i>
                     </b-input-group-text>
                   </b-input-group-prepend>
-                  <input type="password" class="form-control" placeholder="Password" v-model="credentials.password" required>
+                  <input type="password" class="form-control" placeholder="Password" v-model="credentials.password">
                 </b-input-group>
                 <b-row>
                   <b-col cols="6">
@@ -52,7 +52,7 @@
     <!-- Errors Modal -->
     <b-modal id="errorModal" v-model="error.show" title="Login Failed" class="text-center" size="sm" centered ok-only>
       <p></p>
-      <p class="text-danger">{{ error.message }}</p>
+      <p class="text-danger" v-for="message in error.messages">{{ message }}</p>
     </b-modal>
   </div>
 </template>
@@ -71,32 +71,20 @@
           email: '',
           password: ''
         },
-        validation: {
-          email: {
-            valid: true
-          },
-          password: {
-            valid: true
-          }
-        },
         error: {
           show: false,
-          message: ''
+          messages: []
         }
       }
     },
     methods: {
       submit () {
-        this.validation.email.valid = this.credentials.email || false
-        this.validation.password.valid = this.credentials.password || false
-        if (this.validation.email.valid && this.validation.password.valid) {
-          let credentials = {
-            email: this.credentials.email,
-            password: this.credentials.password
-          }
-          let redirect = this.redirect
-          Auth.doLogin(this, credentials, redirect)
+        let credentials = {
+          email: this.credentials.email,
+          password: this.credentials.password
         }
+        let redirect = this.redirect
+        Auth.doLogin(this, credentials, redirect)
       }
     },
     computed: {
@@ -113,8 +101,5 @@
 }
 #errorModal .modal-title {
   text-align: center;
-}
-.input-group.error input {
-  border-color: crimson;
 }
 </style>
