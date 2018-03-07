@@ -75,6 +75,10 @@ router.beforeEach((to, from, next) => {
       next('/login/' + btoa(to.path))
     }
   } else {
+    // return to dashboard if trying to access login page and is already signed in
+    if (Auth.isAuthenticated() && to.name === 'Login') {
+      next('/dashboard')
+    }
     next()
   }
 })
