@@ -3,7 +3,7 @@
     <span>
       <a href="http://www.instapoint.cl">InstaPoint SpA</a> &copy; 2018</span>
     <span class="ml-auto">Powered by
-      <a href="http://coreui.io">CoreUI</a>
+      <a href="http://coreui.io" target="_blank">CoreUI</a>
     </span>
   </footer>
 </template>
