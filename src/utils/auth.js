@@ -1,4 +1,3 @@
-import router from '../router'
 import Formio from 'formiojs'
 
 // URL and endpoint constants
@@ -19,7 +18,7 @@ export default {
 
       // Redirect to a specified route
       if (redirect) {
-        router.push(atob(redirect))
+        this.$router.push(redirect)
       }
     }).catch((err) => {
       console.log('login-error', err)
@@ -30,11 +29,20 @@ export default {
   // To log out, we just need to remove the token
   doLogout () {
     localStorage.removeItem('authUser')
-    router.push('/login')
+    this.$router.push({name: 'Login'})
   },
   // Check wether the user is authenticated or not
   isAuthenticated () {
     let user = JSON.parse(localStorage.getItem('authUser')) || {}
     return !!user.x_jwt_token
+  },
+  // Route to sign in page
+  signIn (redirect) {
+    this.$router.push({
+      name: 'Login',
+      params: {
+        redirect: redirect
+      }
+    })
   }
 }
