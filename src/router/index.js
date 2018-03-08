@@ -56,13 +56,9 @@ const router = new Router({
       component: Page500
     },
     {
-      path: '/login/:redirect?',
+      path: '/login',
       name: 'Login',
-      component: Login,
-      props: true,
-      meta: {
-        requiresAuthentication: false
-      }
+      component: Login
     },
     {
       // Redirect to 404 page if not found
@@ -80,12 +76,11 @@ router.beforeEach((to, from, next) => {
       // only proceed if authenticated.
       next()
     } else {
-      next('/login/' + btoa(to.path))
+      Auth.signIn(to.path)
     }
   } else {
-    // return to dashboard if trying to access login page and is already signed in
-    if (Auth.isAuthenticated() && to.name === 'Login') {
-      next('/dashboard')
+    if (to.name === 'Login' && Auth.isAuthenticated()) {
+      router.push({name: 'Dashboard'})
     }
     next()
   }
