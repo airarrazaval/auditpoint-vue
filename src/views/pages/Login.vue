@@ -2,11 +2,15 @@
   <div class="app flex-row align-items-center">
     <div class="container">
       <b-row class="justify-content-center">
-        <b-col md="8">
+        <b-col md="6">
           <b-card-group>
             <b-card no-body class="p-4">
               <b-card-body>
-                <h1>Login</h1>
+                <h1>
+                  Login
+                  <img src="@/assets/logo.png" alt="" class="logo float-right">
+                </h1>
+                
                 <p class="text-muted">Sign In to your account</p>
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
@@ -34,25 +38,26 @@
                 </b-row>
               </b-card-body>
             </b-card>
-            <b-card no-body class="text-white bg-primary py-5 d-md-down-none" style="width:44%">
+            <!--b-card no-body class="text-white bg-primary py-5 d-md-down-none" style="width:44%">
               <b-card-body class="text-center">
                 <div>
-                  <h2>Sign up</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua.</p>
-                    <p>{{ redirect }}</p>
+                  <h2>Status</h2>
+                  <p>REDIRECT: {{ redirect }}</p>
+                  <p>AUTH: {{ isAuthenticated }}</p>
                   <b-button variant="primary" class="active mt-3">Register Now!</b-button>
                 </div>
               </b-card-body>
-            </b-card>
+            </b-card-->
           </b-card-group>
         </b-col>
       </b-row>
     </div>
     <!-- Errors Modal -->
     <b-modal id="errorModal" v-model="error.show" title="Login Failed" class="text-center" size="sm" centered ok-only>
-      <p></p>
-      <p class="text-danger" v-for="message in error.messages">{{ message }}</p>
+      <p>Ooops! It seems there has been a problem.</p>
+      <ul>
+        <li class="text-danger" v-for="message in error.messages">{{ parseMessage(message) }}</li>
+      </ul>
     </b-modal>
   </div>
 </template>
@@ -83,8 +88,17 @@
           email: this.credentials.email,
           password: this.credentials.password
         }
-        let redirect = this.redirect
+        let redirect = this.redirect || '/'
         Auth.doLogin(this, credentials, redirect)
+      },
+      parseMessage (message) {
+        if (message.toLowerCase() === 'missing username') {
+          return 'Username field cannot be empty'
+        } else if (message === '"email" must be a valid email') {
+          return 'Please enter a valid email'
+        } else {
+          return 'An unknown error has occured. Please contact the site administrator if the error persists.'
+        }
       }
     },
     computed: {
@@ -101,5 +115,9 @@
 }
 #errorModal .modal-title {
   text-align: center;
+}
+img.logo {
+  width: 100px;
+  margin-top: -20px;
 }
 </style>
