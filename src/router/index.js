@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Auth from '../utils/auth'
+import { isAuthenticated } from '@/auth/formio'
 
 // Containers
 import Full from '@/containers/Full'
@@ -72,14 +72,14 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuthentication)) {
     // this route requires auth, check if logged in
-    if (Auth.isAuthenticated()) {
+    if (isAuthenticated()) {
       // only proceed if authenticated.
       next()
     } else {
-      Auth.signIn(to.path)
+      router.push({name: 'Login'})
     }
   } else {
-    if (to.name === 'Login' && Auth.isAuthenticated()) {
+    if (to.name === 'Login' && isAuthenticated()) {
       router.push({name: 'Dashboard'})
     }
     next()
