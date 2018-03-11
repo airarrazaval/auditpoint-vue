@@ -55,16 +55,14 @@
     <!-- Errors Modal -->
     <b-modal id="errorModal" v-model="error.show" title="Login Failed" class="text-center" size="sm" centered ok-only>
       <p>Ooops! It seems there has been a problem.</p>
-      <ul>
-        <li class="text-danger" v-for="message in error.messages">{{ parseMessage(message) }}</li>
-      </ul>
+      <p class="text-danger">{{ parseMessage(error.message) }}</p>
     </b-modal>
   </div>
 </template>
 
 <script>
-  import Auth from '@/utils/auth'
-
+  import { login } from '@/auth/formio'
+  
   export default {
     name: 'Login',
     props: [
@@ -78,7 +76,7 @@
         },
         error: {
           show: false,
-          messages: []
+          message: ''
         }
       }
     },
@@ -89,21 +87,20 @@
           password: this.credentials.password
         }
         let redirect = this.redirect || '/'
-        Auth.doLogin(this, credentials, redirect)
+        login(this, credentials, redirect)
       },
-      parseMessage (message) {
-        if (message.toLowerCase() === 'missing username') {
+      parseMessage (msg) {
+        let message = msg.toLowerCase()
+        console.log(message)
+        if (message === 'missing username') {
           return 'Username field cannot be empty'
         } else if (message === '"email" must be a valid email') {
           return 'Please enter a valid email'
+        } else if (message === 'user or password was incorrect') {
+          return 'Email address or password was incorrect'
         } else {
           return 'An unknown error has occured. Please contact the site administrator if the error persists.'
         }
-      }
-    },
-    computed: {
-      isAuthenticated () {
-        return Auth.isAuthenticated()
       }
     }
   }
